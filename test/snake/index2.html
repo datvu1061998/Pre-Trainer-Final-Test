@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    .content {
+        width: 600px;
+        height: 600px;
+        background: #333030;
+        position: relative;
+        border-radius: 5px;
+    }
+
+    .header,
+    .food {
+        width: 30px;
+        height: 30px;
+        background: #c62b2b;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 50%;
+        list-style: none;
+    }
+
+    .food {
+        background: lawngreen;
+        border-radius: 5px;
+    }
+</style>
+
+<body>
+    <div class="content">
+        <ul class="snake">
+            <li class="header"></li>
+        </ul>
+
+        <div class="food"></div>
+    </div>
+</body>
+<script>
+    var header = document.querySelector('.header');
+    var food = document.querySelector('.food');
+    var arr = [];
+    var snakeX = 10,
+        snakeY = 10;
+    var snakeBX = 9,
+        snakeBY = 10;
+    var key = "",
+        dir = 'right';
+    var xFoods, yFoods;
+
+    function randomFood() {
+        xFoods = Math.floor(Math.random() * 19 + 1);
+        yFoods = Math.floor(Math.random() * 19 + 1);
+        console.log(xFoods, yFoods);
+
+        food.style.top = `${xFoods * food.offsetWidth}px`;
+        food.style.left = `${yFoods * food.offsetHeight}px`;
+    }
+    randomFood();
+
+    function snakeMove() {
+        snakeBX = snakeX;
+        snakeBY = snakeY;
+        arr.unshift([snakeBY, snakeBX]);
+        if (dir === 'right') {
+            snakeX++;
+            if (snakeX == 20) {
+                snakeX = 0;
+            }
+            header.style.setProperty('left', `${snakeX * header.offsetWidth}px`);
+        }
+        if (dir === 'left') {
+            snakeX--;
+            if (snakeX < 0) {
+                snakeX = 19;
+            }
+            header.style.setProperty('left', `${snakeX * header.offsetWidth}px`);
+        }
+        if (dir === 'up') {
+            snakeY--;
+            if (snakeY < 0) {
+                snakeY = 19;
+            }
+            header.style.setProperty('top', `${snakeY * header.offsetWidth}px`);
+        }
+        if (dir === 'down') {
+            snakeY++;
+            if (snakeY == 20) {
+                snakeX = 0;
+            }
+            header.style.setProperty('top', `${snakeY * header.offsetWidth}px`);
+        }
+
+        if (header.style.top === food.style.top && header.style.left === food.style.left) {
+            randomFood();
+            addSnake();
+        }
+
+        var snake = document.querySelectorAll('li');
+        arr.splice(snake.length-1);
+        for (let i = 1; i < snake.length; i++) {
+            snake[i].style.setProperty('top', `${  arr[i-1][0] * header.offsetWidth}px`);
+            snake[i].style.setProperty('left', `${ arr[i-1][1] * header.offsetWidth}px`);
+        }
+
+    }
+
+    function addSnake() {
+        var snake = document.querySelector('ul');
+        var cell = header.cloneNode(true);
+        cell.style.setProperty('background', '#505075');
+        cell.style.setProperty('top', `${snakeBY * header.offsetWidth}px`);
+        cell.style.setProperty('left', `${snakeBX * header.offsetWidth}px`);
+        snake.appendChild(cell);
+    }
+
+    setInterval(snakeMove, 500);
+
+    function control(e) {
+        key = e.keyCode;
+        if (key === 37 && dir !== 'right') {
+            dir = 'left';
+        }
+        if (key === 38 && dir !== 'down') {
+            dir = 'up';
+        }
+        if (key === 39 && dir !== 'left') {
+            dir = 'right';
+        }
+        if (key === 40 && dir !== 'up') {
+            dir = 'down';
+        }
+    }
+    window.addEventListener('keyup', control);
+</script>
+
+</html>

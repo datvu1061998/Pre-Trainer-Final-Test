@@ -1,0 +1,38 @@
+
+.um,.um1 {
+    width: 30px;
+    height: 30px;
+    background-color: #402f2f;
+    margin: 2px;
+    padding: 5px;
+    float: left;
+    /* display: inline-block; */
+    border-radius: 5px;
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: 1.5em;
+    color: white;
+    font-family: segoe ui light;
+    cursor: pointer;
+}
+
+.content,.content1 {
+    background: #e9d7d7;
+    padding: 10px;
+    display: inline-block;
+    border-radius: 5px;
+}
+.win {
+    font-size: 4em;
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    font-weight: bold;
+    color: #462525;
+    transition: all 0.5s;
+    transform: scale(0);
+}
+
+.win.won {
+    transform: scale(1);
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <form class="setForm">
+        n: <input type="text" name="n" required><br>
+        m: <input type="text" name="m" required><br>
+        <input type="submit" value="Submit">
+    </form>
+    <div class="content1">
+        <div class="content1" style="display: block">
+            <div class="row1"></div>
+        </div>
+
+        <div class="content"></div>
+    </div>
+</body>
+<script>
+    var myForm = document.querySelector('.setForm');
+    var content = document.querySelector('.content');
+    var header = document.querySelector('.row1');
+    var um1;
+    var n,m;
+    var numberScroll = 0;
+
+    function getMN(e) {
+        e.preventDefault();
+        content.innerHTML = "";
+        header.innerHTML ="";
+        n = myForm.querySelector('[name="n"]').value;
+        m = myForm.querySelector('[name="m"]').value;
+        numberScroll = 0;
+        var s1 = "";
+
+        var s = "";
+        for (let i = 0; i < m; i++) {
+            s1 += `<div class="um1" data-hcolumn ="${i}">${i+1} </div>`;
+        }
+        s = addRow();
+        content.innerHTML = s;
+        header.innerHTML = s1;
+        um1 = header.querySelectorAll('.um1');
+        um1.forEach(x => x.addEventListener('click', mySort));
+    }
+    function addRow(){
+        var a = n;
+        var b = m;
+        console.log(n,numberScroll);
+        a = a-100*numberScroll;
+        numberScroll++;
+        if(a<=0){
+            return "";
+        }
+        var s="";
+        for (let i = 0; i < a; i++) {
+            s += `<div class="row" data-row="${i}">`;
+            for (let j = 0; j < b; j++) {
+                var x = Math.floor((Math.random() * 1000) + 1);
+                s += `<div class="um" data-column="${j}" data-row ="${i}">${x}</div>`;
+            }
+            s += `</div>`;
+        }
+        return s;
+    }
+    myForm.addEventListener('submit', getMN);
+
+    function mySort(e) {
+        var columnSort = document.querySelectorAll(`.um[data-column="${this.dataset.hcolumn}"]`);
+        var numberRowSort = Array.from(columnSort).sort((a,b)=> parseInt(a.textContent)< parseInt(b.textContent)).map(x=>{return x.dataset.row});
+        var arr =[];
+        for(x of numberRowSort){
+            arr.push(content.querySelectorAll(`.row[data-row="${x}"]`)[0]);
+        }
+        content.innerHTML ="";
+        for(x of arr){
+            content.appendChild(x);
+        }
+    }
+
+    function myScroll(e){
+        const scrollSlide = window.scrollY + window.innerHeight;
+        const contentB = content.offsetTop + content.scrollHeight;
+
+        if(scrollSlide > contentB){
+            var s = addRow();
+            content.innerHTML += s;
+        }
+    }
+    window.addEventListener('scroll',myScroll);
+
+</script>
+
+</html>
